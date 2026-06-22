@@ -1,0 +1,91 @@
+# 安装软件或安装包需要单独确认。
+
+prefix_rule(
+    pattern = ["npm", "install"],
+    decision = "prompt",
+    justification = "安装依赖需要单独确认"
+)
+
+prefix_rule(
+    pattern = ["npm", "i"],
+    decision = "prompt",
+    justification = "安装依赖需要单独确认"
+)
+
+prefix_rule(
+    pattern = ["pnpm", "install"],
+    decision = "prompt",
+    justification = "安装依赖需要单独确认"
+)
+
+prefix_rule(
+    pattern = ["pnpm", "add"],
+    decision = "prompt",
+    justification = "安装依赖需要单独确认"
+)
+
+prefix_rule(
+    pattern = ["yarn", "install"],
+    decision = "prompt",
+    justification = "安装依赖需要单独确认"
+)
+
+prefix_rule(
+    pattern = ["pip", "install"],
+    decision = "prompt",
+    justification = "安装包需要单独确认"
+)
+
+prefix_rule(
+    pattern = ["pip3", "install"],
+    decision = "prompt",
+    justification = "安装包需要单独确认"
+)
+
+prefix_rule(
+    pattern = ["python", "-m", "pip", "install"],
+    decision = "prompt",
+    justification = "安装包需要单独确认"
+)
+
+prefix_rule(
+    pattern = ["poetry", "install"],
+    decision = "prompt",
+    justification = "安装包需要单独确认"
+)
+
+prefix_rule(
+    pattern = ["uv", "pip", "install"],
+    decision = "prompt",
+    justification = "安装包需要单独确认"
+)
+
+prefix_rule(
+    pattern = ["brew", "install"],
+    decision = "prompt",
+    justification = "安装软件需要单独确认"
+)
+
+prefix_rule(
+    pattern = ["choco", "install"],
+    decision = "prompt",
+    justification = "安装软件需要单独确认"
+)
+
+prefix_rule(
+    pattern = ["winget", "install"],
+    decision = "prompt",
+    justification = "安装软件需要单独确认"
+)
+
+prefix_rule(
+    pattern = ["apt", "install"],
+    decision = "prompt",
+    justification = "安装软件需要单独确认"
+)
+
+prefix_rule(
+    pattern = ["apt-get", "install"],
+    decision = "prompt",
+    justification = "安装软件需要单独确认"
+)
