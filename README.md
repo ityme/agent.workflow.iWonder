@@ -79,6 +79,9 @@ user -> pm -> builder -> pm -> tm -> coder -> tm -> tester -> tm -> opser -> tm 
 - `tester` 无论通过与否必须回报 `tm`，再退出。
 - `opser` 无论成功与否必须回报 `tm`，再退出。
 - `tm` 只有在收到 `tester` 通过后才能启动 `opser`。
+- `opser` 负责本地 git 收口。每个 `tm` 子任务通过 tester 后，默认应由 `opser` 暂存当前子任务相关文件并执行一次本地 `git commit -m`。
+- `opser` 执行 commit 前必须先 `git add` 对应文件；禁止默认无脑 `git add .`，除非已确认工作区没有无关变更。
+- 如果没有可提交变更，`opser` 必须记录 no-op commit decision 并回报 `tm`；如果 `git add` 或 `git commit` 失败，`opser` 必须记录失败原因并回报 `tm`。
 - `tm` 只有在收到 `opser` 成功后才能退出并回报 `pm`。
 
 ### 4. Track 留痕
@@ -182,7 +185,7 @@ pm -> builder -> tm -> coder/tester/opser
 - `tm`: 负责单个子任务的串行编排。
 - `coder`: 只执行单个实现任务。
 - `tester`: 只验证当前子任务。
-- `opser`: 只在测试通过后做受控 git 收口。
+- `opser`: 只在测试通过后做受控 git 收口，包括暂存当前子任务相关文件并创建本地 commit。
 
 任何角色的职责边界都是硬约束。
 
@@ -280,6 +283,24 @@ PM 可以把这些进度事件整理后展示给用户，让用户知道下游�
 `coder` 应在独立 git worktree 内完成子任务，`tester` 验证对应 worktree，`opser` 只处理已经通过测试的 worktree。
 
 不同子任务之间应保持目录、记录和上下文隔离。
+
+### Git 收口
+
+每个 `tm` 子任务在 tester 通过后进入 `opser` 收口。默认本地 commit 是允许的，并且应作为子任务完成状态的记录。
+
+`opser` 的本地收口顺序为：
+
+1. 检查工作区状态。
+2. 确认哪些文件属于当前子任务。
+3. `git add` 当前子任务相关文件。
+4. 执行 `git commit -m` 记录子任务状态。
+5. 将提交结果、commit SHA、暂存文件列表和失败原因写入 track。
+
+`opser` 不应默认使用 `git add .`。只有在确认工作区没有无关变更时，才允许使用 `git add .`。
+
+如果没有可提交变更，`opser` 不得伪造提交，应记录 no-op commit decision 并回报 `tm`。如果 `git add` 或 `git commit` 失败，`opser` 应记录失败原因并回报 `tm`，由 `tm` 按 opser 重试规则处理。
+
+`push`、`PR`、`merge` 仍默认禁用，必须单独确认或由外部规则明确打开。
 
 ### 未来编排器方向
 

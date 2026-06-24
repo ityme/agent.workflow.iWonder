@@ -110,6 +110,12 @@ track/
 - `redaction_notes`: 已过滤的敏感信息或原始噪声说明。
 - `tester_result`: `passed` / `failed` / `blocked`，tester 必须先回报该结果再退出。
 - `opser_result`: `success` / `fail` / `blocked`，opser 必须先回报该结果再退出。
+- `staged_files`: opser 为当前子任务暂存的文件列表。
+- `commit_message`: opser 使用的本地 commit message。
+- `commit_sha`: 成功创建的本地 commit SHA。
+- `commit_result`: `created` / `no_op` / `failed` / `blocked`。
+- `commit_failure_reason`: `git add` 或 `git commit` 失败时的原因。
+- `noop_reason`: 没有可提交变更时的 no-op 原因。
 - `tm_decision`: `start_opser` / `retry_coder` / `retry_task` / `retry_opser` / `escalate_human`。
 - `retry_count`: 当前任务或角色的重试次数。
 - `retry_reason`: 触发重试的简短原因。
@@ -147,6 +153,10 @@ track/
 - `tester` 无论通过与否都先回报 `tm`，然后退出。
 - `tm` 只在 `tester_result = passed` 时启动 `opser`。
 - `opser` 无论通过与否都先回报 `tm`，然后退出。
+- `opser` 负责本地 git 收口；tester 通过后，opser 默认应暂存当前子任务相关文件并执行一次本地 `git commit -m`。
+- `opser` 执行 commit 前必须先 `git add` 对应文件；禁止默认无脑 `git add .`，除非已确认工作区没有无关变更。
+- 如果没有可提交变更，`opser` 必须记录 `commit_result = no_op` 和 `noop_reason`，并回报 `tm`。
+- 如果 `git add` 或 `git commit` 失败，`opser` 必须记录 `commit_result = failed` 和 `commit_failure_reason`，并回报 `tm`。
 - `tm` 只在 `opser_result = success` 时退出。
 - `tm` 在 `opser_result != success` 时重启 `opser`，重试序号递增。
 - 同一子任务内 `opser` 连续失败 3 次时升级人工介入。

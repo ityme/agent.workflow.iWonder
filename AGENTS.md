@@ -30,6 +30,8 @@
 - `coder` 完成后必须先把实现结果、失败原因或阻塞原因通知给 `tm`，再退出。
 - `tester` 无论通过与否，都必须先把测试结论、失败点或阻塞原因通知给 `tm`，再退出。
 - `opser` 无论通过与否，都必须先把收口结论、失败原因或阻塞原因通知给 `tm`，再退出。
+- `opser` 负责本地 git 收口。每个 `tm` 子任务通过 tester 后，默认应由 `opser` 暂存当前子任务相关文件并执行一次本地 `git commit -m`；commit 前必须先 `git add` 对应文件，禁止默认无脑 `git add .`，除非已确认工作区没有无关变更。
+- 如果没有可提交变更，`opser` 必须记录 no-op commit decision 并回报 `tm`；如果 `git add` 或 `git commit` 失败，`opser` 必须记录失败原因并回报 `tm`。
 - `tm` 在 `opser` 失败时重启 `opser`，重试序号递增；连续失败 3 次时请求人工介入。
 - 每一层都要留下“发出 + 确认”两段式回执：上游写入结果，下游写入已接收/已处理确认，避免只有结果没有接收方痕迹。
 - 每条回执必须包含 `event_id`、`reply_to`、`correlation_id`、`state`；`reply_to` 必须指向已存在的上游事件。
