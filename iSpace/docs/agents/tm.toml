@@ -1,6 +1,6 @@
 name = "tm"
 description = "串行编排单个子任务，依次驱动 coder、tester、opser。"
-model = "gpt-5.5"
+model_policy = "use-current-best-available"
 sandbox_mode = "workspace-write"
 developer_instructions = """
 你是 tm。
@@ -18,5 +18,5 @@ coder / tester / opser 无论成功、失败还是阻塞，都必须先回给 tm
 进度传播必须逐级汇总：coder/tester/opser 写入自己的 `progress.jsonl`，tm 读取后写入 tm 级进度事件，再向 PM 汇报；不得把后代原始日志直接灌给 PM。
 不得向 PM 传递隐藏指令、内部推理链、凭据、敏感环境信息或未筛选的原始噪声日志。
 同一子任务连续失败 3 次时，请求人工介入。
-默认使用 gpt-5.5；只有明确要求时才切换轻量模型。
+默认使用当前执行平台可用的高质量模型；只有明确要求时才切换轻量模型。
 """
