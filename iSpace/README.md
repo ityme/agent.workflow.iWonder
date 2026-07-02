@@ -1,8 +1,28 @@
 # iWonder Agent Harness
 
-`iWonder Agent Harness` 是一套通用 AI Agent 协作工程文档规范，用于定义多角色任务编排、状态转移、事件回执、权限边界、可观测运行记录和人工介入策略。
+`iWonder Agent Harness` 是一套平台无关、Python 优先、中文文档优先的 AI Agent 协作工程包。它用于定义多角色任务编排、状态转移、事件回执、权限边界、可观测运行记录、调度器接口和审计规则。
 
-当前项目只维护文档级协议和配置样例；它不是运行时编排器，也不会在代码层强制启动、阻断或调度 agent。任何具体平台、CLI、IDE 插件或自研执行器，都可以通过适配层读取这些规范并转换为自己的配置。
+当前仓库正在从文档级规约演进为完整 harness 工程包。目标是让用户复制 `iSpace/` 后，可以通过文档、schema、profile、adapter、Python 工具、示例 worker、测试和清单，开箱运行并审计一次完整 agent 协作任务。
+
+## 快速入口
+
+建议按以下顺序阅读：
+
+1. [快速开始](docs/01-quickstart.md)
+2. [核心概念](docs/02-concepts.md)
+3. [架构](docs/03-architecture.md)
+4. [角色](docs/04-roles.md)
+5. [工作流](docs/05-workflow.md)
+6. [状态机](docs/06-state-machine.md)
+7. [事件协议](docs/07-event-protocol.md)
+8. [工具](docs/11-tools.md)
+9. [Adapter](docs/12-adapters.md)
+10. [安全](docs/14-security.md)
+
+设计和计划：
+
+- [Harness 工程规约设计文档](docs/design/harness-engineering-spec.md)
+- [Harness 工程实施计划](docs/plans/harness-engineering-implementation-plan.md)
 
 ## 目录说明
 
@@ -10,250 +30,120 @@
 iSpace/
 ├─ README.md
 ├─ docs/
-│  ├─ config.toml
+│  ├─ 00-overview.md
+│  ├─ 01-quickstart.md
+│  ├─ 02-concepts.md
+│  ├─ 03-architecture.md
+│  ├─ 04-roles.md
+│  ├─ 05-workflow.md
+│  ├─ 06-state-machine.md
+│  ├─ 07-event-protocol.md
+│  ├─ 08-permissions.md
+│  ├─ 09-observability.md
+│  ├─ 10-error-handling.md
+│  ├─ 11-tools.md
+│  ├─ 12-adapters.md
+│  ├─ 13-testing.md
+│  ├─ 14-security.md
+│  ├─ design/
+│  ├─ plans/
 │  ├─ agents/
-│  │  ├─ pm.toml
-│  │  ├─ builder.toml
-│  │  ├─ tm.toml
-│  │  ├─ coder.toml
-│  │  ├─ tester.toml
-│  │  └─ opser.toml
 │  └─ rules/
-│     └─ default.rules
 └─ track/
    └─ README.md
 ```
 
-- `README.md`: 通用 harness 的入口说明。
-- `docs/config.toml`: 默认执行环境样例，不绑定具体平台。
-- `docs/agents/`: 默认开发 profile 的角色说明样例。
-- `docs/rules/default.rules`: 权限审批规则样例。
-- `track/README.md`: 运行记录目录结构、字段、状态机和命名规范。
+后续阶段会继续补齐：
 
-根目录的 `AGENTS.md` 是仓库级协作约束，适合被当前使用的 agent 平台读取。`iSpace/` 下的内容是平台无关的 harness 文档本体。
+- `profiles/`
+- `adapters/`
+- `schemas/`
+- `templates/`
+- `examples/`
+- `workers/`
+- `tools/`
+- `tests/`
+- `checklists/`
+- `tmp/`
+- `reports/`
 
-## 项目定位
+## 当前阶段
 
-本项目的目标不是立即实现一个复杂编排器，而是先把多 agent 协作中的角色边界、通信方式、回执机制、失败处理和留痕结构定义清楚。
+当前已完成：
 
-推荐演进顺序：
+- 通用 harness 文档定位。
+- 设计文档。
+- 总实施计划。
+- 编号文档骨架。
+- track 协议说明。
+- 默认角色配置样例。
 
-1. 文档级约束：用 Markdown 和配置样例明确协议。
-2. 结构化校验：增加 JSON Schema、状态机 validator 和示例事件。
-3. 半自动执行：由脚本生成任务目录、校验回执和汇总进度。
-4. 运行时编排器：统一启动 worker、校验状态推进、处理重试和人工介入。
+后续按 [实施计划](docs/plans/harness-engineering-implementation-plan.md) 分阶段推进。
 
-当前仓库处于第 1 阶段。
+## 核心原则
 
-## 默认开发 Profile
+- 不绑定任何单一 AI 平台、CLI、IDE 插件、模型供应商或运行时。
+- Markdown 正文中文优先，必要专业术语保留英文。
+- Python 永远优先。
+- Python 标准库优先，可选依赖增强。
+- 核心工具默认只写 `iSpace/track`、`iSpace/tmp`、`iSpace/reports`。
+- worker 只能在 adapter 声明的 workspace 内执行业务操作。
+- adapter command 必须严格匹配 allowlist。
+- 外部发布动作默认禁用。
+- 状态校验失败时 fail closed。
+- Windows、Linux、macOS 都是一等支持目标。
 
-默认 profile 面向代码开发任务，角色拓扑为：
+## Profile
 
-```text
-user -> pm -> builder -> pm -> tm -> coder -> tm -> tester -> tm -> opser -> tm -> pm -> user
+第一版目标包含四个完整 profile：
+
+- `default-development`: 代码开发任务。
+- `documentation`: 文档写作和文档重构任务。
+- `data-analysis`: 数据分析、报表和结论生成任务。
+- `ops-change`: 运维变更、配置变更和发布前检查任务。
+
+每个 profile 都应包含角色定义、流程定义、状态转移、adapter 配置、本地 Python worker、示例和验收说明。
+
+## 工具目标
+
+完整实现后，Python CLI 入口为：
+
+```powershell
+python iSpace/tools/harness.py <command>
 ```
 
-这个拓扑是通用 harness 的一个样例，不是唯一可用形态。其他场景可以替换或增删角色，例如：
+目标命令：
 
-- 文档写作：`pm -> planner -> writer -> reviewer -> publisher`
-- 数据分析：`pm -> analyst -> verifier -> reporter`
-- 运维变更：`pm -> planner -> executor -> validator -> releaser`
+- `init`
+- `demo`
+- `new-run`
+- `new-task`
+- `dispatch`
+- `run-task`
+- `validate`
+- `audit`
+- `summarize`
+- `selftest`
 
-只要保留状态机、回执、权限和可观测性约束，就可以视为同一 harness 协议的不同 profile。
+当前阶段尚未实现这些命令，后续会按实施计划逐步补齐。
 
-## 需求确认
+## Track
 
-接到新任务后，`pm` 必须先进行需求确认。
+`track/` 是运行记录目录。它保存 run、task、attempt、event、result、closeout 和 timeline，是校验、恢复、审计和汇总的主要依据。
 
-确认内容至少包括：
+详见 [track 协议](track/README.md)。
 
-- 范围。
-- 变更点。
-- 验收标准。
-- 非目标。
-- 边界条件。
-- 风险。
-- 未决问题。
+## 安全边界
 
-需求确认阶段必须保持耐心。只要仍存在合理追问，`pm` 就应继续主动向用户澄清，不得把自己的理解视为用户确认，也不得急于提示进入 `builder`。
+默认禁止：
 
-需求确认完成必须同时满足：
-
-- 用户已经明确确认，或明确授权继续。
-- 范围清晰。
-- 变更点清晰。
-- 验收标准可验证。
-- 非目标明确。
-- 未决问题为空。
-
-当以上条件全部满足时，`pm` 应醒目提醒用户：需求确认已闭环，现在可以进入 `builder` 阶段拆解任务；同时允许用户在进入前继续补充或修正。
-
-需求确认完成前，不进入 `builder` 拆解，也不进入实现。
-
-## 角色职责
-
-- `pm`: 只负责和用户沟通、澄清需求、做最终裁决。
-- `builder`: 负责把需求拆成带序号的小任务、依赖和验收标准。
-- `tm`: 负责单个子任务的串行编排。
-- `coder`: 只执行单个实现任务。
-- `tester`: 只验证当前子任务。
-- `opser`: 只在验证通过后执行收口动作。
-
-任何角色的职责边界都是硬约束。
-
-父级角色不能在子级失败、阻塞或多次重试失败时接管子级职责。例如 builder 拆解失败时，PM 不能自己拆任务；coder 实现失败时，tm 不能自己写代码；tester 验证失败时，tm 不能自己代替测试；opser 收口失败时，tm 不能自己绕过 opser 收口。
-
-子级执行慢不等于阻塞。父级角色应持续等待并读取进度事件，不能因为等待时间较长就提前停止。只有满足以下条件之一时，父级才可以停止等待：
-
-- 子级明确返回 `failed`。
-- 子级明确返回 `blocked`。
-- 连续 3 次无进展检查，并且存在明确阻塞证据。
-- 状态机非法跳转、权限缺失、必要确认缺失、依赖不可用等证据表明无法继续。
-
-父级角色允许做的动作只有：
-
-- 下发任务。
-- 接收回执。
-- 确认结果。
-- 要求重试。
-- 记录阻塞。
-- 升级人工介入。
-
-子级角色也不能横向越界。每个 worker 只能接收直属上级下发的任务，只能向直属上级回报，不能绕过流程直接联系用户或其他 worker。
-
-## 进度可观测
-
-每个角色都必须在关键节点写入进度事件。进度事件不是内部推理链，而是面向编排和用户透明度的执行记录。
-
-进度事件应说明：
-
-- 当前角色。
-- 当前阶段。
-- 接收到的任务输入摘要。
-- 已完成的动作。
-- 相关文件、命令、产物或 track 记录等证据引用。
-- 阻塞点或失败原因。
-- 重试次数。
-- 下一步。
-- 当前结果。
-
-进度采用逐级传播，而不是跨级读取原始日志：
-
-- `coder/tester/opser` 写入各自 attempt 下的 `progress.jsonl`。
-- `tm` 读取直属子级的进度事件，过滤敏感信息和原始噪声，汇总成 `task/<task_id>/tm/<run_id>/progress.jsonl`。
-- `builder` 写入 `builder/<run_id>/progress.jsonl`，说明拆解进度、阻塞和计划产物。
-- `pm` 读取 `builder` 和 `tm` 的进度事件，再整理成用户可见的进度说明。
-
-不得展示：
-
-- 隐藏系统指令或开发者指令。
-- 内部推理链。
-- 凭据、token、密钥和敏感环境信息。
-- 未筛选的大段原始日志。
-- 与任务无关的低层噪声。
-
-## 明确回执
-
-所有关键步骤采用“发出 + 确认”两段式回执。
-
-每个 worker 完成当前子任务后，必须先向直属上级回报结果，再退出。下一层收到结果后，也要写入已接收或已处理确认。
-
-这个设计的目的，是让任务链能追踪到：
-
-- 谁发起了动作。
-- 谁收到了动作。
-- 谁确认了结果。
-- 哪一步失败或阻塞。
-- 重试是否发生过。
-
-每条关键回执至少包含：
-
-- `event_id`
-- `reply_to`
-- `correlation_id`
-- `state`
-- `role`
-- `summary`
-- `current_phase`
-- `progress_summary`
-- `evidence_refs`
-- `next_step`
-- `result`
-- `ack_result`
-- `timestamp`
-
-## Track 留痕
-
-所有任务过程应写入 `track/`，保持追加式、可追踪、按时间排序。
-
-推荐先阅读：
-
-```text
-track/README.md
-```
-
-核心编号：
-
-- `run_id`: `0001`
-- `task_id`: `001_login-api`
-- `attempt_id`: `attempt-0001`
-- `event_id`: `evt-00000001`
-
-`track/` 是 harness 的事实记录层。未来如果实现运行时编排器，应以 `track/` 为状态校验、重试判断和进度汇总的主要依据。
-
-## 权限与收口
-
-默认允许：
-
-- 工作区内阅读。
-- 工作区内编辑。
-- 测试和检查。
-- 常规本地版本控制操作。
-
-需要单独确认：
-
-- 安装软件。
-- 安装包。
-- 访问需要授权的网络资源。
+- 未在 allowlist 声明的命令。
+- shell 拼接命令。
 - 远端写入。
-- 启用 `push`。
-- 创建或更新 PR。
+- push。
+- PR。
 - merge。
-- 部署或变更外部系统。
+- 部署。
+- 修改 adapter 未授权的业务路径。
 
-`push`、`PR`、`merge` 当前只作为禁用字段和未来流程预留，不默认启用。
-
-在代码开发 profile 中，`opser` 可以在 tester 通过后执行本地 git 收口：
-
-1. 检查工作区状态。
-2. 确认哪些文件属于当前子任务。
-3. 暂存当前子任务相关文件。
-4. 执行本地 commit。
-5. 将提交结果、commit SHA、暂存文件列表和失败原因写入 track。
-
-非代码 profile 可以把 `opser` 替换为其他收口策略，例如生成报告、归档文档、导出产物或提交审批单。
-
-## 适配层
-
-本项目不要求使用特定平台。适配层只需要完成以下职责：
-
-- 将通用角色说明转换为目标平台可读取的提示词或 worker 配置。
-- 将权限规则转换为目标平台的审批策略。
-- 将任务进度、回执和结果写入 `track/`。
-- 在状态推进前校验当前状态、回执字段、重试次数和任务归属。
-- 将下游进度逐级汇总，过滤敏感信息和原始噪声。
-
-适配层可以是 CLI、脚本、IDE 插件、CI job、自研服务或人工执行流程。
-
-## 未来编排器方向
-
-未来如果实现运行时编排器，应遵循：
-
-- 以 `track/` 为主要事实源。
-- 所有 worker 必须由编排器启动。
-- 所有 worker 输出必须是结构化 JSON。
-- 状态推进前必须校验当前状态、回执字段、重试次数和任务归属。
-- 编排器应实现进度事件聚合：直属父级读取子级进度，过滤敏感信息和原始噪声后写入父级进度事件。
-- 编排器应实现停滞检查：记录 `last_progress_at`、`stall_check_count` 和 `blocked_evidence`，只有连续 3 次无进展且有阻塞证据时才停止等待。
-- 校验失败时 fail closed，即停止推进并记录 `blocked`。
-- `pm` 只读取结构化摘要和可观测进度事件，不读取 worker 原始日志。
+任何权限升级都必须记录原因、范围、风险和用户确认依据。
