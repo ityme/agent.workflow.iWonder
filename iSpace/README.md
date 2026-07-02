@@ -19,6 +19,19 @@
 9. [Adapter](docs/12-adapters.md)
 10. [安全](docs/14-security.md)
 
+示例和清单：
+
+- [最小成功运行](examples/minimal-success-run/README.md)
+- [失败并重试运行](examples/failed-and-retry-run/README.md)
+- [阻塞运行](examples/blocked-run/README.md)
+- [人工介入运行](examples/human-escalation-run/README.md)
+- [非代码文档运行](examples/non-code-documentation-run/README.md)
+- [接入检查清单](checklists/adoption-checklist.md)
+- [任务启动检查清单](checklists/task-start-checklist.md)
+- [Profile 设计检查清单](checklists/profile-design-checklist.md)
+- [收口检查清单](checklists/closeout-checklist.md)
+- [发布就绪检查清单](checklists/release-readiness-checklist.md)
+
 设计和计划：
 
 - [Harness 工程规约设计文档](docs/design/harness-engineering-spec.md)
@@ -49,23 +62,19 @@ iSpace/
 │  ├─ plans/
 │  ├─ agents/
 │  └─ rules/
-└─ track/
-   └─ README.md
+├─ profiles/
+├─ adapters/
+├─ schemas/
+├─ templates/
+├─ examples/
+├─ workers/
+├─ tools/
+├─ tests/
+├─ checklists/
+├─ track/
+├─ tmp/
+└─ reports/
 ```
-
-后续阶段会继续补齐：
-
-- `profiles/`
-- `adapters/`
-- `schemas/`
-- `templates/`
-- `examples/`
-- `workers/`
-- `tools/`
-- `tests/`
-- `checklists/`
-- `tmp/`
-- `reports/`
 
 ## 当前阶段
 
@@ -76,7 +85,13 @@ iSpace/
 - 总实施计划。
 - 编号文档骨架。
 - track 协议说明。
-- 默认角色配置样例。
+- JSON Schema 和模板。
+- 四个 profile。
+- adapter 配置和 allowlist 校验。
+- Python 核心工具库。
+- run/task 创建、validate、demo、run-task、audit、summarize。
+- 本地 Python 示例 worker。
+- 示例运行记录、报告、示例说明和检查清单。
 
 后续按 [实施计划](docs/plans/harness-engineering-implementation-plan.md) 分阶段推进。
 
@@ -106,26 +121,27 @@ iSpace/
 
 ## 工具目标
 
-完整实现后，Python CLI 入口为：
+Python CLI 入口为：
 
 ```powershell
 python iSpace/tools/harness.py <command>
 ```
 
-目标命令：
+当前已实现：
 
-- `init`
 - `demo`
 - `new-run`
 - `new-task`
-- `dispatch`
 - `run-task`
 - `validate`
 - `audit`
 - `summarize`
-- `selftest`
 
-当前阶段尚未实现这些命令，后续会按实施计划逐步补齐。
+后续阶段继续补齐：
+
+- `init`
+- `dispatch`
+- `selftest`
 
 ## Track
 
