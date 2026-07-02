@@ -11,28 +11,40 @@
 ## 推荐流程
 
 ```powershell
-python iSpace/tools/harness.py init
 python iSpace/tools/harness.py demo
 python iSpace/tools/harness.py validate --run 0001
 python iSpace/tools/harness.py audit --run 0001
 python iSpace/tools/harness.py summarize --run 0001
 ```
 
-在工具实现前，以上命令是目标用法。当前阶段先建立文档骨架，后续阶段会逐步补齐工具。
+Bash 写法相同：
+
+```bash
+python iSpace/tools/harness.py demo
+python iSpace/tools/harness.py validate --run 0001
+python iSpace/tools/harness.py audit --run 0001
+python iSpace/tools/harness.py summarize --run 0001
+```
+
+也可以直接运行总自检：
+
+```powershell
+python iSpace/tools/harness.py selftest
+```
 
 ## 运行结果
 
-完整实现后，快速开始流程应生成：
+快速开始流程会生成：
 
-- `iSpace/track/<run_id>` 下的运行记录。
+- `iSpace/track` 下的运行记录。
 - `iSpace/reports` 下的汇总报告。
 - 可通过 validate 和 audit 的结构化事件。
 
 ## 失败处理
 
-- 如果命令不存在，说明工具阶段尚未实现。
 - 如果 validate 失败，优先查看 schema 错误和状态机错误。
 - 如果 audit 失败，优先查看敏感信息、缺失回执和越权路径。
+- 如果 demo 失败，优先查看对应角色的 `result.json`。
 
 ## 下一步
 

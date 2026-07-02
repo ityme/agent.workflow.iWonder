@@ -34,3 +34,24 @@ Adapter 负责把通用 harness 规则映射到具体执行环境：
 - `manual`
 - `cli-worker`
 - `template`
+
+## 使用时机
+
+- `local-python-workers`: 本地 demo、自检和无外部依赖验证。
+- `manual`: 需要人工审批、人工执行或不能自动化的步骤。
+- `cli-worker`: 接入已有外部 CLI worker。
+- `template`: 新建 adapter 时复制使用。
+
+## 命令匹配
+
+调度器必须使用完整数组匹配：
+
+```json
+["python", "iSpace/workers/default-development/coder_worker.py"]
+```
+
+下面这种附加参数不在 allowlist 中时必须拒绝：
+
+```json
+["python", "iSpace/workers/default-development/coder_worker.py", "--extra"]
+```

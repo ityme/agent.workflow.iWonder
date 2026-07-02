@@ -4,6 +4,10 @@
 from __future__ import annotations
 
 import argparse
+import os
+import subprocess
+import sys
+import tempfile
 from pathlib import Path
 
 from harness_lib.paths import HarnessPaths, find_harness_root
@@ -72,6 +76,9 @@ def build_parser() -> argparse.ArgumentParser:
     summarize = subparsers.add_parser("summarize", help="生成 run 摘要报告。")
     summarize.add_argument("--run", required=True)
     summarize.set_defaults(handler=handle_summarize)
+
+    selftest = subparsers.add_parser("selftest", help="运行基础自检。")
+    selftest.set_defaults(handler=handle_selftest)
     return parser
 
 
@@ -183,6 +190,40 @@ def handle_summarize(args: argparse.Namespace) -> int:
     return 0
 
 
+def handle_selftest(args: argparse.Namespace) -> int:
+    repo_root = builtin_harness_root().parent
+    with tempfile.TemporaryDirectory(prefix="harness-selftest-") as tmp:
+        isolated_root = Path(tmp) / "iSpace"
+        isolated_root.mkdir()
+        env = os.environ.copy()
+        env["HARNESS_SELFTEST_RUNNING"] = "1"
+        commands = [
+            [sys.executable, "-m", "unittest", "discover", "iSpace/tests"],
+            [sys.executable, "iSpace/tools/harness.py", "--root", str(isolated_root), "demo"],
+            [sys.executable, "iSpace/tools/harness.py", "--root", str(isolated_root), "validate", "--run", "0001"],
+            [sys.executable, "iSpace/tools/harness.py", "--root", str(isolated_root), "audit", "--run", "0001"],
+            [sys.executable, "iSpace/tools/harness.py", "--root", str(isolated_root), "summarize", "--run", "0001"],
+        ]
+        for command in commands:
+            printable = _printable_command(command)
+            print(printable)
+            completed = subprocess.run(
+                command,
+                cwd=repo_root,
+                check=False,
+                text=True,
+                capture_output=True,
+                env=env,
+            )
+            if completed.stdout:
+                print(completed.stdout, end="")
+            if completed.stderr:
+                print(completed.stderr, end="")
+            if completed.returncode != 0:
+                return completed.returncode
+    return 0
+
+
 def builtin_harness_root() -> Path:
     return Path(__file__).resolve().parents[1]
 
@@ -191,6 +232,11 @@ def adapter_root(root: Path) -> Path:
     if (root / "adapters").exists():
         return root / "adapters"
     return builtin_harness_root() / "adapters"
+
+
+def _printable_command(command: list[str]) -> str:
+    parts = ["python" if index == 0 and Path(part).name.startswith("python") else part for index, part in enumerate(command)]
+    return " ".join(parts)
 
 
 if __name__ == "__main__":

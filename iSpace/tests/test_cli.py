@@ -2,6 +2,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import os
 from pathlib import Path
 
 from iSpace.tools.harness_lib.jsonio import read_json
@@ -54,6 +55,22 @@ class HarnessCliTest(unittest.TestCase):
 
             run_json = read_json(root / "track" / "runs" / "0001" / "run.json")
             self.assertEqual(run_json["task_ids"], ["001_api"])
+
+    @unittest.skipIf(
+        os.environ.get("HARNESS_SELFTEST_RUNNING") == "1",
+        "selftest 内部运行 unittest 时跳过递归自检。",
+    )
+    def test_selftest_runs_without_polluting_requested_root(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / "iSpace"
+            root.mkdir()
+
+            result = self.run_cli("selftest", root=root)
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("python -m unittest discover iSpace/tests", result.stdout)
+            self.assertIn("demo", result.stdout)
+            self.assertFalse((root / "track").exists())
 
 
 if __name__ == "__main__":

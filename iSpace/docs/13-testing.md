@@ -24,6 +24,14 @@ python -m unittest discover iSpace/tests
 - audit。
 - summarize。
 
+命令：
+
+```powershell
+python iSpace/tools/harness.py selftest
+```
+
+selftest 使用临时 harness 根目录运行 demo 链路，不会污染仓库内置的 `track` 样例。
+
 ## 覆盖范围
 
 - CLI 参数。

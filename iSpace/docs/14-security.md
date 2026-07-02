@@ -27,6 +27,19 @@ audit 应检查：
 - 隐藏指令。
 - 未脱敏环境信息。
 
+当前基础 audit 已检查：
+
+- 敏感字符串。
+- 本机绝对路径。
+- JSON 格式。
+- 缺失 task/result/closeout。
+
+审计命令：
+
+```powershell
+python iSpace/tools/harness.py audit --run 0001
+```
+
 ## 发布安全
 
 以下动作默认禁用：
