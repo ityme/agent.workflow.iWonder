@@ -7,6 +7,7 @@ import argparse
 from pathlib import Path
 
 from harness_lib.paths import HarnessPaths, find_harness_root
+from harness_lib.profile import load_profile
 from harness_lib.track import TrackStore
 
 
@@ -46,8 +47,9 @@ def build_parser() -> argparse.ArgumentParser:
     )
     new_task.set_defaults(handler=handle_new_task)
 
-    validate = subparsers.add_parser("validate", help="校验 run 和关联 task。")
-    validate.add_argument("--run", required=True)
+    validate = subparsers.add_parser("validate", help="校验 run、关联 task 或 profile。")
+    validate.add_argument("--run")
+    validate.add_argument("--profile")
     validate.set_defaults(handler=handle_validate)
     return parser
 
@@ -84,6 +86,15 @@ def handle_new_task(args: argparse.Namespace) -> int:
 
 
 def handle_validate(args: argparse.Namespace) -> int:
+    if args.profile:
+        root = Path(args.root).resolve() if args.root else find_harness_root(Path(__file__))
+        profile_path = root / "profiles" / args.profile / "profile.json"
+        load_profile(profile_path)
+        print(f"valid profile {args.profile}")
+        return 0
+    if not args.run:
+        print("invalid: validate requires --run or --profile")
+        return 2
     errors = make_store(args.root).validate_run(args.run)
     if errors:
         for error in errors:

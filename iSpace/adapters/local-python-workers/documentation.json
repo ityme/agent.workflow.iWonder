@@ -1,0 +1,46 @@
+{
+  "adapter_id": "local-python-workers.documentation",
+  "version": "1.0.0",
+  "default_timeout_seconds": 60,
+  "allowlist": [
+    ["python", "iSpace/workers/documentation/planner_worker.py"],
+    ["python", "iSpace/workers/documentation/writer_worker.py"],
+    ["python", "iSpace/workers/documentation/reviewer_worker.py"],
+    ["python", "iSpace/workers/documentation/publisher_worker.py"]
+  ],
+  "roles": {
+    "planner": {
+      "command": ["python", "iSpace/workers/documentation/planner_worker.py"],
+      "input_file": "{attempt_dir}/input.json",
+      "output_file": "{attempt_dir}/result.json",
+      "timeout_seconds": 60,
+      "workspace": "{harness_root}/tmp/workspaces/{run_id}/{task_id}/planner"
+    },
+    "writer": {
+      "command": ["python", "iSpace/workers/documentation/writer_worker.py"],
+      "input_file": "{attempt_dir}/input.json",
+      "output_file": "{attempt_dir}/result.json",
+      "timeout_seconds": 60,
+      "workspace": "{harness_root}/tmp/workspaces/{run_id}/{task_id}/writer"
+    },
+    "reviewer": {
+      "command": ["python", "iSpace/workers/documentation/reviewer_worker.py"],
+      "input_file": "{attempt_dir}/input.json",
+      "output_file": "{attempt_dir}/result.json",
+      "timeout_seconds": 60,
+      "workspace": "{harness_root}/tmp/workspaces/{run_id}/{task_id}/reviewer"
+    },
+    "publisher": {
+      "command": ["python", "iSpace/workers/documentation/publisher_worker.py"],
+      "input_file": "{attempt_dir}/input.json",
+      "output_file": "{attempt_dir}/result.json",
+      "timeout_seconds": 60,
+      "workspace": "{harness_root}/tmp/workspaces/{run_id}/{task_id}/publisher"
+    }
+  },
+  "permissions": {
+    "allow_remote_write": false,
+    "allow_publish": false,
+    "allow_merge": false
+  }
+}

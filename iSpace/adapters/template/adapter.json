@@ -1,0 +1,22 @@
+{
+  "adapter_id": "template",
+  "version": "1.0.0",
+  "default_timeout_seconds": 60,
+  "allowlist": [
+    ["python", "iSpace/workers/example/example_worker.py"]
+  ],
+  "roles": {
+    "example": {
+      "command": ["python", "iSpace/workers/example/example_worker.py"],
+      "input_file": "{attempt_dir}/input.json",
+      "output_file": "{attempt_dir}/result.json",
+      "timeout_seconds": 60,
+      "workspace": "{harness_root}/tmp/workspaces/{run_id}/{task_id}/example"
+    }
+  },
+  "permissions": {
+    "allow_remote_write": false,
+    "allow_publish": false,
+    "allow_merge": false
+  }
+}

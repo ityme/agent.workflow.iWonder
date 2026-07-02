@@ -1,0 +1,72 @@
+{
+  "profile_id": "documentation",
+  "version": "1.0.0",
+  "description": "文档写作、文档重构和规约维护 profile。",
+  "roles": [
+    {
+      "role": "pm",
+      "description": "确认读者、范围、验收标准和非目标。"
+    },
+    {
+      "role": "planner",
+      "description": "规划文档结构、信息层级和交付顺序。"
+    },
+    {
+      "role": "writer",
+      "description": "编写或修改文档正文。"
+    },
+    {
+      "role": "reviewer",
+      "description": "检查一致性、完整性、可读性和事实风险。"
+    },
+    {
+      "role": "publisher",
+      "description": "归档文档、生成发布材料或准备交付摘要。"
+    }
+  ],
+  "flow": [
+    "pm",
+    "planner",
+    "writer",
+    "reviewer",
+    "publisher",
+    "pm"
+  ],
+  "state_transitions": {
+    "pm": {
+      "intake": ["clarifying"],
+      "clarifying": ["planned"],
+      "planned": ["waiting_ack"],
+      "waiting_ack": ["exited"]
+    },
+    "planner": {
+      "planned": ["waiting_ack"],
+      "waiting_ack": ["exited"]
+    },
+    "writer": {
+      "running": ["waiting_ack", "blocked"],
+      "waiting_ack": ["exited"],
+      "blocked": ["exited"]
+    },
+    "reviewer": {
+      "running": ["waiting_ack", "blocked"],
+      "waiting_ack": ["exited"],
+      "blocked": ["exited"]
+    },
+    "publisher": {
+      "running": ["waiting_ack", "blocked"],
+      "waiting_ack": ["exited"],
+      "blocked": ["exited"]
+    }
+  },
+  "retry_policy": {
+    "max_attempts": 3,
+    "stall_check_limit": 3,
+    "fail_closed": true
+  },
+  "closeout_policy": {
+    "default_action": "archive_artifact",
+    "external_publish_enabled": false,
+    "external_merge_enabled": false
+  }
+}

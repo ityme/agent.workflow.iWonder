@@ -1,0 +1,63 @@
+{
+  "profile_id": "data-analysis",
+  "version": "1.0.0",
+  "description": "数据分析、报表生成和证据化结论输出 profile。",
+  "roles": [
+    {
+      "role": "pm",
+      "description": "确认分析问题、数据边界、输出格式和验收标准。"
+    },
+    {
+      "role": "analyst",
+      "description": "读取数据、执行分析并生成初步结论。"
+    },
+    {
+      "role": "verifier",
+      "description": "校验数据来源、计算逻辑、异常值和可复现性。"
+    },
+    {
+      "role": "reporter",
+      "description": "输出结构化报告、证据引用和风险说明。"
+    }
+  ],
+  "flow": [
+    "pm",
+    "analyst",
+    "verifier",
+    "reporter",
+    "pm"
+  ],
+  "state_transitions": {
+    "pm": {
+      "intake": ["clarifying"],
+      "clarifying": ["planned"],
+      "planned": ["waiting_ack"],
+      "waiting_ack": ["exited"]
+    },
+    "analyst": {
+      "running": ["waiting_ack", "blocked"],
+      "waiting_ack": ["exited"],
+      "blocked": ["exited"]
+    },
+    "verifier": {
+      "running": ["waiting_ack", "blocked"],
+      "waiting_ack": ["exited"],
+      "blocked": ["exited"]
+    },
+    "reporter": {
+      "running": ["waiting_ack", "blocked"],
+      "waiting_ack": ["exited"],
+      "blocked": ["exited"]
+    }
+  },
+  "retry_policy": {
+    "max_attempts": 3,
+    "stall_check_limit": 3,
+    "fail_closed": true
+  },
+  "closeout_policy": {
+    "default_action": "export_report",
+    "external_publish_enabled": false,
+    "external_merge_enabled": false
+  }
+}

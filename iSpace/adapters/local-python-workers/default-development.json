@@ -1,0 +1,38 @@
+{
+  "adapter_id": "local-python-workers.default-development",
+  "version": "1.0.0",
+  "default_timeout_seconds": 60,
+  "allowlist": [
+    ["python", "iSpace/workers/default-development/coder_worker.py"],
+    ["python", "iSpace/workers/default-development/tester_worker.py"],
+    ["python", "iSpace/workers/default-development/opser_worker.py"]
+  ],
+  "roles": {
+    "coder": {
+      "command": ["python", "iSpace/workers/default-development/coder_worker.py"],
+      "input_file": "{attempt_dir}/input.json",
+      "output_file": "{attempt_dir}/result.json",
+      "timeout_seconds": 60,
+      "workspace": "{harness_root}/tmp/workspaces/{run_id}/{task_id}/coder"
+    },
+    "tester": {
+      "command": ["python", "iSpace/workers/default-development/tester_worker.py"],
+      "input_file": "{attempt_dir}/input.json",
+      "output_file": "{attempt_dir}/result.json",
+      "timeout_seconds": 60,
+      "workspace": "{harness_root}/tmp/workspaces/{run_id}/{task_id}/tester"
+    },
+    "opser": {
+      "command": ["python", "iSpace/workers/default-development/opser_worker.py"],
+      "input_file": "{attempt_dir}/input.json",
+      "output_file": "{attempt_dir}/result.json",
+      "timeout_seconds": 60,
+      "workspace": "{harness_root}/tmp/workspaces/{run_id}/{task_id}/opser"
+    }
+  },
+  "permissions": {
+    "allow_remote_write": false,
+    "allow_publish": false,
+    "allow_merge": false
+  }
+}

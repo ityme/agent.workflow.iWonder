@@ -1,0 +1,87 @@
+{
+  "profile_id": "default-development",
+  "version": "1.0.0",
+  "description": "默认代码开发任务 profile，覆盖需求确认、任务拆解、实现、验证和本地收口。",
+  "roles": [
+    {
+      "role": "pm",
+      "description": "澄清需求、确认范围、验收标准、非目标和未决问题。"
+    },
+    {
+      "role": "builder",
+      "description": "把已确认需求拆解为带序号的任务、依赖和验收标准。"
+    },
+    {
+      "role": "tm",
+      "description": "串行编排单个任务，驱动 coder、tester 和 opser。"
+    },
+    {
+      "role": "coder",
+      "description": "在 adapter 声明的 workspace 内完成实现。"
+    },
+    {
+      "role": "tester",
+      "description": "验证当前任务结果并输出结构化结论。"
+    },
+    {
+      "role": "opser",
+      "description": "在验证通过后执行本地收口动作。"
+    }
+  ],
+  "flow": [
+    "pm",
+    "builder",
+    "tm",
+    "coder",
+    "tester",
+    "opser",
+    "tm",
+    "pm"
+  ],
+  "state_transitions": {
+    "pm": {
+      "intake": ["clarifying"],
+      "clarifying": ["ready_for_builder"],
+      "ready_for_builder": ["waiting_builder"],
+      "waiting_builder": ["waiting_user_ack"],
+      "waiting_user_ack": ["exited"]
+    },
+    "builder": {
+      "planned": ["waiting_pm_ack"],
+      "waiting_pm_ack": ["exited"]
+    },
+    "tm": {
+      "planned": ["running"],
+      "running": ["waiting_coder"],
+      "waiting_coder": ["waiting_tester"],
+      "waiting_tester": ["waiting_opser"],
+      "waiting_opser": ["waiting_ack"],
+      "waiting_ack": ["exited"]
+    },
+    "coder": {
+      "running": ["waiting_tm_ack", "blocked"],
+      "waiting_tm_ack": ["exited"],
+      "blocked": ["exited"]
+    },
+    "tester": {
+      "running": ["waiting_tm_ack", "blocked"],
+      "waiting_tm_ack": ["exited"],
+      "blocked": ["exited"]
+    },
+    "opser": {
+      "running": ["waiting_tm_ack", "blocked"],
+      "waiting_tm_ack": ["exited"],
+      "blocked": ["exited"]
+    }
+  },
+  "retry_policy": {
+    "max_attempts": 3,
+    "stall_check_limit": 3,
+    "fail_closed": true
+  },
+  "closeout_policy": {
+    "default_action": "local_commit",
+    "external_publish_enabled": false,
+    "external_merge_enabled": false
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "adapter_id": "local-python-workers.ops-change",
+  "version": "1.0.0",
+  "default_timeout_seconds": 60,
+  "allowlist": [
+    ["python", "iSpace/workers/ops-change/planner_worker.py"],
+    ["python", "iSpace/workers/ops-change/executor_worker.py"],
+    ["python", "iSpace/workers/ops-change/validator_worker.py"],
+    ["python", "iSpace/workers/ops-change/releaser_worker.py"]
+  ],
+  "roles": {
+    "planner": {
+      "command": ["python", "iSpace/workers/ops-change/planner_worker.py"],
+      "input_file": "{attempt_dir}/input.json",
+      "output_file": "{attempt_dir}/result.json",
+      "timeout_seconds": 60,
+      "workspace": "{harness_root}/tmp/workspaces/{run_id}/{task_id}/planner"
+    },
+    "executor": {
+      "command": ["python", "iSpace/workers/ops-change/executor_worker.py"],
+      "input_file": "{attempt_dir}/input.json",
+      "output_file": "{attempt_dir}/result.json",
+      "timeout_seconds": 60,
+      "workspace": "{harness_root}/tmp/workspaces/{run_id}/{task_id}/executor"
+    },
+    "validator": {
+      "command": ["python", "iSpace/workers/ops-change/validator_worker.py"],
+      "input_file": "{attempt_dir}/input.json",
+      "output_file": "{attempt_dir}/result.json",
+      "timeout_seconds": 60,
+      "workspace": "{harness_root}/tmp/workspaces/{run_id}/{task_id}/validator"
+    },
+    "releaser": {
+      "command": ["python", "iSpace/workers/ops-change/releaser_worker.py"],
+      "input_file": "{attempt_dir}/input.json",
+      "output_file": "{attempt_dir}/result.json",
+      "timeout_seconds": 60,
+      "workspace": "{harness_root}/tmp/workspaces/{run_id}/{task_id}/releaser"
+    }
+  },
+  "permissions": {
+    "allow_remote_write": false,
+    "allow_publish": false,
+    "allow_merge": false
+  }
+}
