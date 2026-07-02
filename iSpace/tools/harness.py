@@ -11,6 +11,8 @@ from harness_lib.profile import load_profile
 from harness_lib.track import TrackStore
 from harness_lib.adapter import load_adapter
 from harness_lib.dispatcher import run_task
+from harness_lib.audit import audit_run
+from harness_lib.summarize import summarize_run
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -62,6 +64,14 @@ def build_parser() -> argparse.ArgumentParser:
 
     demo = subparsers.add_parser("demo", help="运行 default-development 本地 demo。")
     demo.set_defaults(handler=handle_demo)
+
+    audit = subparsers.add_parser("audit", help="审计 run 的敏感信息和结构风险。")
+    audit.add_argument("--run", required=True)
+    audit.set_defaults(handler=handle_audit)
+
+    summarize = subparsers.add_parser("summarize", help="生成 run 摘要报告。")
+    summarize.add_argument("--run", required=True)
+    summarize.set_defaults(handler=handle_summarize)
     return parser
 
 
@@ -153,6 +163,24 @@ def handle_demo(args: argparse.Namespace) -> int:
     failed = [item for item in results if item["exit_code"] != 0 or item["result"].get("result") != "success"]
     print(f"demo run {run['run_id']} task {task['task_id']} roles {len(results)}")
     return 1 if failed else 0
+
+
+def handle_audit(args: argparse.Namespace) -> int:
+    root = Path(args.root).resolve() if args.root else find_harness_root(Path(__file__))
+    findings = audit_run(HarnessPaths(root), args.run)
+    if findings:
+        for finding in findings:
+            print(f"audit finding: {finding}")
+        return 1
+    print(f"audit clean run {args.run}")
+    return 0
+
+
+def handle_summarize(args: argparse.Namespace) -> int:
+    root = Path(args.root).resolve() if args.root else find_harness_root(Path(__file__))
+    report = summarize_run(HarnessPaths(root), args.run)
+    print(f"summary written {report}")
+    return 0
 
 
 def builtin_harness_root() -> Path:
