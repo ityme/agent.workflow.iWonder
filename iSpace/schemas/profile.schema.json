@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://iwonder.local/schemas/profile.schema.json",
+  "title": "Harness Profile",
+  "type": "object",
+  "required": [
+    "profile_id",
+    "version",
+    "description",
+    "roles",
+    "flow",
+    "state_transitions",
+    "retry_policy",
+    "closeout_policy"
+  ],
+  "properties": {
+    "profile_id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "roles": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "flow": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "state_transitions": {
+      "type": "object"
+    },
+    "retry_policy": {
+      "type": "object"
+    },
+    "closeout_policy": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

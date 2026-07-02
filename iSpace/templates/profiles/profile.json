@@ -1,0 +1,74 @@
+{
+  "profile_id": "default-development",
+  "version": "1.0.0",
+  "description": "默认代码开发任务 profile。",
+  "roles": [
+    {
+      "role": "pm",
+      "description": "澄清需求并确认验收标准。"
+    },
+    {
+      "role": "builder",
+      "description": "拆解任务和依赖。"
+    },
+    {
+      "role": "tm",
+      "description": "串行编排单个任务。"
+    },
+    {
+      "role": "coder",
+      "description": "执行实现。"
+    },
+    {
+      "role": "tester",
+      "description": "验证当前任务。"
+    },
+    {
+      "role": "opser",
+      "description": "执行收口动作。"
+    }
+  ],
+  "flow": [
+    "pm",
+    "builder",
+    "tm",
+    "coder",
+    "tester",
+    "opser",
+    "tm",
+    "pm"
+  ],
+  "state_transitions": {
+    "pm": [
+      "intake",
+      "clarifying",
+      "ready_for_builder",
+      "waiting_builder",
+      "waiting_user_ack",
+      "exited"
+    ],
+    "builder": [
+      "planned",
+      "waiting_pm_ack",
+      "exited"
+    ],
+    "tm": [
+      "planned",
+      "running",
+      "waiting_coder",
+      "waiting_tester",
+      "waiting_opser",
+      "waiting_ack",
+      "exited"
+    ]
+  },
+  "retry_policy": {
+    "max_attempts": 3,
+    "stall_check_limit": 3,
+    "fail_closed": true
+  },
+  "closeout_policy": {
+    "default_action": "local_commit",
+    "external_publish_enabled": false
+  }
+}

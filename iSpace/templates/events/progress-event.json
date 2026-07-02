@@ -1,0 +1,29 @@
+{
+  "event_id": "evt-00000001",
+  "reply_to": "evt-00000000",
+  "correlation_id": "corr-0001-001-demo-task",
+  "run_id": "0001",
+  "task_id": "001_demo-task",
+  "attempt_id": "attempt-0001",
+  "role": "tester",
+  "parent_role": "tm",
+  "state": "waiting_ack",
+  "current_phase": "testing",
+  "summary": "完成示例验证",
+  "progress_summary": "已执行示例任务的关键路径验证。",
+  "progress_source": "self",
+  "aggregated_from": [],
+  "completed_actions": [
+    "读取输入文件",
+    "生成验证结果"
+  ],
+  "evidence_refs": [
+    "task/001_demo-task/tm/0001/tester/attempt-0001/result.json"
+  ],
+  "blockers": [],
+  "result": "success",
+  "ack_result": "processed",
+  "next_step": "等待 tm 确认验证结果。",
+  "user_visible": true,
+  "timestamp": "2026-07-02T10:00:00+08:00"
+}

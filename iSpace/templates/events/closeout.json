@@ -1,0 +1,15 @@
+{
+  "run_id": "0001",
+  "task_id": "001_demo-task",
+  "attempt_id": "attempt-0001",
+  "role": "opser",
+  "closeout_action": "archive_artifact",
+  "closeout_result": "created",
+  "summary": "示例任务产物已归档。",
+  "staged_files": [],
+  "commit_message": "",
+  "commit_sha": "",
+  "noop_reason": "",
+  "closeout_failure_reason": "",
+  "timestamp": "2026-07-02T10:00:00+08:00"
+}

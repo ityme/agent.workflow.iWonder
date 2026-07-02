@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://iwonder.local/schemas/run.schema.json",
+  "title": "Harness Run",
+  "type": "object",
+  "required": [
+    "run_id",
+    "title",
+    "profile",
+    "state",
+    "created_at"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string",
+      "pattern": "^[0-9]{4}$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "profile": {
+      "type": "string",
+      "minLength": 1
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "intake",
+        "clarifying",
+        "planned",
+        "running",
+        "waiting_ack",
+        "passed",
+        "failed",
+        "blocked",
+        "exited"
+      ]
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "task_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": true
+}

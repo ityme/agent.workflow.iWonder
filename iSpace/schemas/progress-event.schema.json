@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://iwonder.local/schemas/progress-event.schema.json",
+  "title": "Harness Progress Event",
+  "type": "object",
+  "required": [
+    "event_id",
+    "reply_to",
+    "correlation_id",
+    "run_id",
+    "task_id",
+    "role",
+    "state",
+    "current_phase",
+    "summary",
+    "progress_summary",
+    "result",
+    "ack_result",
+    "timestamp"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "pattern": "^evt-[0-9]{8}$"
+    },
+    "reply_to": {
+      "type": "string"
+    },
+    "correlation_id": {
+      "type": "string"
+    },
+    "run_id": {
+      "type": "string",
+      "pattern": "^[0-9]{4}$"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "attempt_id": {
+      "type": "string",
+      "pattern": "^attempt-[0-9]{4}$"
+    },
+    "role": {
+      "type": "string"
+    },
+    "parent_role": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "intake",
+        "clarifying",
+        "ready_for_builder",
+        "planned",
+        "running",
+        "waiting_ack",
+        "passed",
+        "failed",
+        "blocked",
+        "exited"
+      ]
+    },
+    "current_phase": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "progress_summary": {
+      "type": "string"
+    },
+    "progress_source": {
+      "type": "string",
+      "enum": [
+        "self",
+        "child",
+        "aggregated_child"
+      ]
+    },
+    "aggregated_from": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "completed_actions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "result": {
+      "type": "string",
+      "enum": [
+        "success",
+        "fail",
+        "blocked"
+      ]
+    },
+    "ack_result": {
+      "type": "string",
+      "enum": [
+        "received",
+        "processed",
+        "rejected"
+      ]
+    },
+    "next_step": {
+      "type": "string"
+    },
+    "user_visible": {
+      "type": "boolean"
+    },
+    "timestamp": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

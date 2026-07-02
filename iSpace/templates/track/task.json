@@ -1,0 +1,17 @@
+{
+  "run_id": "0001",
+  "task_id": "001_demo-task",
+  "title": "示例任务",
+  "profile": "default-development",
+  "state": "planned",
+  "created_at": "2026-07-02T10:00:00+08:00",
+  "updated_at": "2026-07-02T10:00:00+08:00",
+  "depends_on": [],
+  "acceptance_criteria": [
+    "任务结果可验证。",
+    "所有关键事件已写入 track。"
+  ],
+  "non_goals": [
+    "不执行外部发布动作。"
+  ]
+}

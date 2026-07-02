@@ -1,0 +1,15 @@
+{
+  "event_id": "evt-00000002",
+  "reply_to": "evt-00000001",
+  "correlation_id": "corr-0001-001-demo-task",
+  "run_id": "0001",
+  "task_id": "001_demo-task",
+  "from_role": "tm",
+  "to_role": "tester",
+  "state": "running",
+  "handoff_input_summary": "请验证示例任务输出是否满足验收标准。",
+  "handoff_allowed": true,
+  "open_questions": [],
+  "confirmation_basis": "用户已确认需求闭环并授权继续。",
+  "timestamp": "2026-07-02T10:00:00+08:00"
+}

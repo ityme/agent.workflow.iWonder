@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://iwonder.local/schemas/handoff.schema.json",
+  "title": "Harness Handoff",
+  "type": "object",
+  "required": [
+    "event_id",
+    "reply_to",
+    "correlation_id",
+    "run_id",
+    "task_id",
+    "from_role",
+    "to_role",
+    "state",
+    "handoff_input_summary",
+    "handoff_allowed",
+    "timestamp"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "pattern": "^evt-[0-9]{8}$"
+    },
+    "reply_to": {
+      "type": "string"
+    },
+    "correlation_id": {
+      "type": "string"
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "from_role": {
+      "type": "string"
+    },
+    "to_role": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "handoff_input_summary": {
+      "type": "string"
+    },
+    "handoff_allowed": {
+      "type": "boolean"
+    },
+    "open_questions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "confirmation_basis": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

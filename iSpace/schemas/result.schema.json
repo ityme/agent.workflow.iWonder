@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://iwonder.local/schemas/result.schema.json",
+  "title": "Harness Result",
+  "type": "object",
+  "required": [
+    "run_id",
+    "task_id",
+    "attempt_id",
+    "role",
+    "result",
+    "summary",
+    "evidence_refs",
+    "timestamp"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "attempt_id": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string"
+    },
+    "result": {
+      "type": "string",
+      "enum": [
+        "success",
+        "fail",
+        "blocked"
+      ]
+    },
+    "summary": {
+      "type": "string"
+    },
+    "failure_reason": {
+      "type": "string"
+    },
+    "blockers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "next_step": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

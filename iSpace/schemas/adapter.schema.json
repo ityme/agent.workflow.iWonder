@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://iwonder.local/schemas/adapter.schema.json",
+  "title": "Harness Adapter",
+  "type": "object",
+  "required": [
+    "adapter_id",
+    "version",
+    "allowlist",
+    "roles"
+  ],
+  "properties": {
+    "adapter_id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "allowlist": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "roles": {
+      "type": "object"
+    },
+    "default_timeout_seconds": {
+      "type": "integer"
+    },
+    "permissions": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

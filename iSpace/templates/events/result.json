@@ -1,0 +1,15 @@
+{
+  "run_id": "0001",
+  "task_id": "001_demo-task",
+  "attempt_id": "attempt-0001",
+  "role": "tester",
+  "result": "success",
+  "summary": "示例任务验证通过。",
+  "failure_reason": "",
+  "blockers": [],
+  "evidence_refs": [
+    "task/001_demo-task/tm/0001/tester/attempt-0001/test-summary.json"
+  ],
+  "next_step": "进入收口阶段。",
+  "timestamp": "2026-07-02T10:00:00+08:00"
+}

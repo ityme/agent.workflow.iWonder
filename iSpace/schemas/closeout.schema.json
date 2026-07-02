@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://iwonder.local/schemas/closeout.schema.json",
+  "title": "Harness Closeout",
+  "type": "object",
+  "required": [
+    "run_id",
+    "task_id",
+    "attempt_id",
+    "role",
+    "closeout_action",
+    "closeout_result",
+    "summary",
+    "timestamp"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "attempt_id": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string"
+    },
+    "closeout_action": {
+      "type": "string",
+      "enum": [
+        "local_commit",
+        "archive_artifact",
+        "export_report",
+        "submit_approval",
+        "no_op"
+      ]
+    },
+    "closeout_result": {
+      "type": "string",
+      "enum": [
+        "created",
+        "no_op",
+        "failed",
+        "blocked"
+      ]
+    },
+    "summary": {
+      "type": "string"
+    },
+    "staged_files": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "commit_message": {
+      "type": "string"
+    },
+    "commit_sha": {
+      "type": "string"
+    },
+    "noop_reason": {
+      "type": "string"
+    },
+    "closeout_failure_reason": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}
