@@ -1,4 +1,4 @@
-# Harness 工程实施计划
+﻿# Harness 工程实施计划
 
 > **给 agent worker 的要求：** 执行本计划时，优先使用 `superpowers:subagent-driven-development`，也可以使用 `superpowers:executing-plans`。必须按任务逐项推进，步骤使用复选框记录状态。
 
@@ -7,6 +7,8 @@
 **架构：** Harness 分为规约层、记录层、执行层和审计层。核心工具默认只写 `iSpace/track`、`iSpace/tmp`、`iSpace/reports`；业务侧变更只能由 worker 在 adapter 声明的 workspace 内完成。Python CLI 读取 profile 和 adapter，校验 allowlist，调度 worker，原子写入 track，校验状态并生成审计与汇总报告。
 
 **技术栈：** Python 3 标准库优先，主要使用 `argparse`、`json`、`pathlib`、`subprocess`、`tempfile`、`unittest`、`datetime`、`os`、`shutil`；可选使用 `jsonschema` 增强 schema 校验；文档使用 Markdown；结构化协议使用 JSON Schema 和 JSON 模板。
+
+**完成状态：** 本计划的第一版交付已完成，当前仓库可通过 `python iSpace/tools/harness.py selftest` 做总体验收。本文后续作为历史实施记录、回归验收清单和后续增强参考。
 
 ---
 
@@ -109,10 +111,10 @@ iSpace/
 - 新建：`iSpace/docs/13-testing.md`
 - 新建：`iSpace/docs/14-security.md`
 
-- [ ] 创建上述文档文件，正文中文优先。
-- [ ] 更新 `iSpace/README.md`，链接编号文档，并说明完整目标工程包。
-- [ ] 保持 `iSpace/docs/design/harness-engineering-spec.md` 作为权威设计来源。
-- [ ] 检查没有残留具体平台绑定。
+- [x] 创建上述文档文件，正文中文优先。
+- [x] 更新 `iSpace/README.md`，链接编号文档，并说明完整目标工程包。
+- [x] 保持 `iSpace/docs/design/harness-engineering-spec.md` 作为权威设计来源。
+- [x] 检查没有残留具体平台绑定。
 
 运行：
 
@@ -149,10 +151,10 @@ git commit -m "docs: add harness documentation skeleton"
 - 新建：`iSpace/templates/profiles/profile.json`
 - 新建：`iSpace/templates/adapters/adapter.json`
 
-- [ ] 根据 `iSpace/track/README.md` 定义必填字段、枚举值和对象结构。
-- [ ] 保持 schema 足够简单，使标准库子集校验器可以覆盖核心规则。
-- [ ] 增加能通过对应 schema 的 JSON 模板。
-- [ ] 在 `iSpace/docs/07-event-protocol.md` 说明 schema 使用方式。
+- [x] 根据 `iSpace/track/README.md` 定义必填字段、枚举值和对象结构。
+- [x] 保持 schema 足够简单，使标准库子集校验器可以覆盖核心规则。
+- [x] 增加能通过对应 schema 的 JSON 模板。
+- [x] 在 `iSpace/docs/07-event-protocol.md` 说明 schema 使用方式。
 
 运行：
 
@@ -184,11 +186,11 @@ git commit -m "feat: add harness schemas and templates"
 - 新建：`iSpace/tests/test_locks.py`
 - 新建：`iSpace/tests/test_jsonio.py`
 
-- [ ] 实现路径工具，解析 harness 根目录，并限制核心工具只写 `track`、`tmp`、`reports`。
-- [ ] 实现 JSON 和 JSONL 原子写入工具。
-- [ ] 实现跨平台锁文件工具。
-- [ ] 实现 JSON/JSONL 读取和追加工具。
-- [ ] 使用 `unittest` 和 `tempfile` 编写无依赖测试。
+- [x] 实现路径工具，解析 harness 根目录，并限制核心工具只写 `track`、`tmp`、`reports`。
+- [x] 实现 JSON 和 JSONL 原子写入工具。
+- [x] 实现跨平台锁文件工具。
+- [x] 实现 JSON/JSONL 读取和追加工具。
+- [x] 使用 `unittest` 和 `tempfile` 编写无依赖测试。
 
 运行：
 
@@ -216,11 +218,11 @@ git commit -m "feat: add harness core utilities"
 - 新建：`iSpace/tests/test_track.py`
 - 修改：`iSpace/tools/harness.py`
 
-- [ ] 实现标准库 schema 子集校验，覆盖必填字段、类型、枚举、数组和嵌套对象。
-- [ ] 检测可选依赖 `jsonschema`，存在时启用完整 JSON Schema 校验。
-- [ ] 实现四个 profile 的状态转移校验。
-- [ ] 实现 run、task、attempt、event 创建工具，并保证幂等。
-- [ ] 暴露 CLI 命令：`new-run`、`new-task`、`validate`。
+- [x] 实现标准库 schema 子集校验，覆盖必填字段、类型、枚举、数组和嵌套对象。
+- [x] 检测可选依赖 `jsonschema`，存在时启用完整 JSON Schema 校验。
+- [x] 实现四个 profile 的状态转移校验。
+- [x] 实现 run、task、attempt、event 创建工具，并保证幂等。
+- [x] 暴露 CLI 命令：`new-run`、`new-task`、`validate`。
 
 运行：
 
@@ -259,11 +261,11 @@ git commit -m "feat: add track and validation commands"
 - 新建：`iSpace/tests/test_adapter_allowlist.py`
 - 新建：`iSpace/tests/test_profile.py`
 
-- [ ] 定义四个完整 profile，包含角色、流程顺序、状态转移、重试策略和收口策略。
-- [ ] 定义本地 Python 示例 worker 的 adapter 配置。
-- [ ] 实现 profile 读取和 adapter 读取。
-- [ ] 强制 command 与 allowlist 完整匹配。
-- [ ] 拒绝未在 adapter allowlist 声明的命令数组。
+- [x] 定义四个完整 profile，包含角色、流程顺序、状态转移、重试策略和收口策略。
+- [x] 定义本地 Python 示例 worker 的 adapter 配置。
+- [x] 实现 profile 读取和 adapter 读取。
+- [x] 强制 command 与 allowlist 完整匹配。
+- [x] 拒绝未在 adapter allowlist 声明的命令数组。
 
 运行：
 
@@ -304,11 +306,11 @@ git commit -m "feat: add profiles and adapter allowlist"
 - 新建：`iSpace/tests/test_demo_flow.py`
 - 修改：`iSpace/tools/harness.py`
 
-- [ ] 实现 `dispatch`，按 adapter 命令、超时、输入文件、输出文件和 workspace 调度单个角色。
-- [ ] 实现 `run-task`，按选定 profile 的流程执行任务。
-- [ ] 实现 `demo`，创建 `default-development` run，并执行本地 worker 链路。
-- [ ] 确保所有 worker 只使用 Python 标准库，并输出结构化 result JSON。
-- [ ] 确保 worker 失败 exit code 会写入 track，不产生未记录状态。
+- [x] 实现 `dispatch`，按 adapter 命令、超时、输入文件、输出文件和 workspace 调度单个角色。
+- [x] 实现 `run-task`，按选定 profile 的流程执行任务。
+- [x] 实现 `demo`，创建 `default-development` run，并执行本地 worker 链路。
+- [x] 确保所有 worker 只使用 Python 标准库，并输出结构化 result JSON。
+- [x] 确保 worker 失败 exit code 会写入 track，不产生未记录状态。
 
 运行：
 
@@ -338,10 +340,10 @@ git commit -m "feat: add dispatcher and demo workers"
 - 新建：`iSpace/tests/test_summarize.py`
 - 修改：`iSpace/tools/harness.py`
 
-- [ ] 实现 `audit` 检查：敏感字符串、缺失确认、无效 `reply_to`、重复 `event_id`、workspace 路径越界、未闭环任务。
-- [ ] 实现 `summarize`，在 `iSpace/reports` 下生成 Markdown 报告。
-- [ ] 实现脱敏工具和告警输出。
-- [ ] 暴露 CLI 命令：`audit`、`summarize`。
+- [x] 实现 `audit` 检查：敏感字符串、缺失确认、无效 `reply_to`、重复 `event_id`、workspace 路径越界、未闭环任务。
+- [x] 实现 `summarize`，在 `iSpace/reports` 下生成 Markdown 报告。
+- [x] 实现脱敏工具和告警输出。
+- [x] 暴露 CLI 命令：`audit`、`summarize`。
 
 运行：
 
@@ -374,9 +376,9 @@ git commit -m "feat: add audit and summary reports"
 - 新建：`iSpace/checklists/closeout-checklist.md`
 - 新建：`iSpace/checklists/release-readiness-checklist.md`
 
-- [ ] 增加示例 README，说明命令、预期 track 文件和失败语义。
-- [ ] 增加接入、任务启动、profile 设计、收口、发布前检查清单。
-- [ ] 从 `iSpace/README.md` 链接示例和清单。
+- [x] 增加示例 README，说明命令、预期 track 文件和失败语义。
+- [x] 增加接入、任务启动、profile 设计、收口、发布前检查清单。
+- [x] 从 `iSpace/README.md` 链接示例和清单。
 
 运行：
 
@@ -404,10 +406,10 @@ git commit -m "docs: add examples and checklists"
 - 修改：`iSpace/docs/14-security.md`
 - 修改：`iSpace/tools/harness.py`
 
-- [ ] 说明每个 CLI 命令的使用时机、输入、输出和失败处理。
-- [ ] 增加 `selftest` 命令，依次运行 unittest、demo、validate、audit、summarize。
-- [ ] 说明可选依赖 `jsonschema` 的增强行为。
-- [ ] 同时提供 PowerShell 和 Bash 命令示例。
+- [x] 说明每个 CLI 命令的使用时机、输入、输出和失败处理。
+- [x] 增加 `selftest` 命令，依次运行 unittest、demo、validate、audit、summarize。
+- [x] 说明可选依赖 `jsonschema` 的增强行为。
+- [x] 同时提供 PowerShell 和 Bash 命令示例。
 
 运行：
 
@@ -431,12 +433,12 @@ git commit -m "feat: add selftest and tool documentation"
 - 按需修改：`iSpace/docs/design/harness-engineering-spec.md`
 - 按需修改：`iSpace/docs/plans/harness-engineering-implementation-plan.md`
 
-- [ ] 运行完整 selftest。
-- [ ] 检查平台绑定残留。
-- [ ] 检查占位词残留。
-- [ ] 确认所有核心工具写入都在 `track`、`tmp`、`reports` 下；worker workspace 必须由 adapter 声明。
-- [ ] 确认四个 profile 可以运行或校验。
-- [ ] 更新最终 README 链接和发布前检查清单。
+- [x] 运行完整 selftest。
+- [x] 检查平台绑定残留。
+- [x] 检查占位词残留。
+- [x] 确认所有核心工具写入都在 `track`、`tmp`、`reports` 下；worker workspace 必须由 adapter 声明。
+- [x] 确认四个 profile 可以运行或校验。
+- [x] 更新最终 README 链接和发布前检查清单。
 
 运行：
 
@@ -480,3 +482,4 @@ git commit -m "docs: finalize harness engineering package"
 - 核心工具只写 `iSpace/track`、`iSpace/tmp`、`iSpace/reports`。
 - 文档说明每个工具命令的使用时机和用法。
 - 不残留具体平台绑定。
+

@@ -2,7 +2,7 @@
 
 `iWonder Agent Harness` 是一套平台无关、Python 优先、中文文档优先的 AI Agent 协作工程包。它用于定义多角色任务编排、状态转移、事件回执、权限边界、可观测运行记录、调度器接口和审计规则。
 
-当前仓库正在从文档级规约演进为完整 harness 工程包。目标是让用户复制 `iSpace/` 后，可以通过文档、schema、profile、adapter、Python 工具、示例 worker、测试和清单，开箱运行并审计一次完整 agent 协作任务。
+当前仓库已形成第一版可运行 harness 工程包。用户复制 `iSpace/` 后，可以通过文档、schema、profile、adapter、Python 工具、示例 worker、测试和清单，开箱运行并审计一次完整 agent 协作任务。
 
 ## 快速入口
 
@@ -76,9 +76,9 @@ iSpace/
 └─ reports/
 ```
 
-## 当前阶段
+## 当前状态
 
-当前已完成：
+第一版已完成：
 
 - 通用 harness 文档定位。
 - 设计文档。
@@ -90,10 +90,11 @@ iSpace/
 - adapter 配置和 allowlist 校验。
 - Python 核心工具库。
 - run/task 创建、validate、demo、run-task、audit、summarize。
+- selftest 总自检。
 - 本地 Python 示例 worker。
 - 示例运行记录、报告、示例说明和检查清单。
 
-后续按 [实施计划](docs/plans/harness-engineering-implementation-plan.md) 分阶段推进。
+后续增强可继续按 [实施计划](docs/plans/harness-engineering-implementation-plan.md) 扩展，例如补齐更严格的状态引用审计、完整 JSON Schema 校验和更多真实 adapter。
 
 ## 核心原则
 
@@ -119,7 +120,7 @@ iSpace/
 
 每个 profile 都应包含角色定义、流程定义、状态转移、adapter 配置、本地 Python worker、示例和验收说明。
 
-## 工具目标
+## 工具
 
 Python CLI 入口为：
 
@@ -136,12 +137,12 @@ python iSpace/tools/harness.py <command>
 - `validate`
 - `audit`
 - `summarize`
+- `selftest`
 
-后续阶段继续补齐：
+后续可增强：
 
 - `init`
-- `dispatch`
-- `selftest`
+- 独立 `dispatch` 子命令
 
 ## Track
 

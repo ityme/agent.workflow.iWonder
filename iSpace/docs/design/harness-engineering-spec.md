@@ -6,6 +6,10 @@
 
 这个规约包不仅包含 Markdown 文档，还应包含 profile、schema、模板、示例、Python 工具、调度器雏形、适配器配置、本地示例 worker、自动化测试、自检命令、审计报告和使用清单。用户拿到仓库后，应能在无外部 AI 平台依赖的情况下跑通一条完整 demo，并能把同一套 harness 迁移到真实项目中。
 
+## 实现状态
+
+第一版已完成可运行工程包：`selftest`、`demo`、`validate`、`audit`、`summarize` 均可在无第三方依赖时运行。后续增强应继续遵守本文的安全边界、profile/adapter 分层和 Python 标准库优先原则。
+
 ## 当前结论
 
 - 文档中文优先。
