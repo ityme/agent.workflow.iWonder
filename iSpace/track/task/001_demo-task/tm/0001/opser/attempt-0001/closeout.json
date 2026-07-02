@@ -1,0 +1,15 @@
+{
+  "attempt_id": "attempt-0001",
+  "closeout_action": "no_op",
+  "closeout_failure_reason": "",
+  "closeout_result": "no_op",
+  "commit_message": "",
+  "commit_sha": "",
+  "noop_reason": "demo worker 不执行真实提交或发布。",
+  "role": "opser",
+  "run_id": "0001",
+  "staged_files": [],
+  "summary": "示例收口已完成。",
+  "task_id": "001_demo-task",
+  "timestamp": "2026-07-02T04:52:55+00:00"
+}

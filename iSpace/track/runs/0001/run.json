@@ -4,7 +4,9 @@
   "run_id": "0001",
   "state": "intake",
   "summary": "",
-  "task_ids": [],
+  "task_ids": [
+    "001_demo-task"
+  ],
   "title": "demo",
-  "updated_at": "2026-07-02T04:40:27+00:00"
+  "updated_at": "2026-07-02T04:51:56+00:00"
 }

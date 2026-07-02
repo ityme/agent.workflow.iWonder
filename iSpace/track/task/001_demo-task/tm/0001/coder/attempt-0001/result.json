@@ -1,0 +1,15 @@
+{
+  "attempt_id": "attempt-0001",
+  "blockers": [],
+  "evidence_refs": [
+    "tmp/workspaces/0001/001_demo-task/coder/coder-summary.json"
+  ],
+  "failure_reason": "",
+  "next_step": "交回调度器处理下一步。",
+  "result": "success",
+  "role": "coder",
+  "run_id": "0001",
+  "summary": "示例实现已完成。",
+  "task_id": "001_demo-task",
+  "timestamp": "2026-07-02T04:52:55+00:00"
+}
