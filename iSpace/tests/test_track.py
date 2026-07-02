@@ -64,6 +64,21 @@ class TrackStoreTest(unittest.TestCase):
             self.assertEqual(len(errors), 1)
             self.assertIn("title", errors[0])
 
+    def test_validate_run_detects_missing_task_reference(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / "iSpace"
+            root.mkdir()
+            store = TrackStore(HarnessPaths(root))
+            run = store.create_run("示例运行", "default-development")
+            run["task_ids"].append("999_missing-task")
+            from iSpace.tools.harness_lib.jsonio import write_json
+
+            write_json(root / "track" / "runs" / "0001" / "run.json", run)
+
+            errors = store.validate_run("0001")
+
+            self.assertTrue(any("missing task file" in item for item in errors))
+
 
 if __name__ == "__main__":
     unittest.main()

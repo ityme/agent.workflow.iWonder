@@ -100,7 +100,11 @@ class TrackStore:
 
         run = read_json(run_path)
         for task_id in run.get("task_ids", []):
-            task_errors = validate_file(self.task_path(task_id), self.schemas_dir / "task.schema.json")
+            task_path = self.task_path(task_id)
+            if not task_path.exists():
+                errors.append(f"missing task file: {task_id}")
+                continue
+            task_errors = validate_file(task_path, self.schemas_dir / "task.schema.json")
             errors.extend(f"{task_id}: {error}" for error in task_errors)
         return errors
 
